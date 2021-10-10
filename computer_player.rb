@@ -11,11 +11,12 @@ class Computer
     @secretCode = pickRandomColors(@valid_colors)
   end
 
-  def pickRandomColors(validColors)
-    randomColors = []
+  def pickRandomColors(valid_colors)
+    random_colors = []
+
     4.times do
-      randomColors << validColors.sample
+      random_colors << valid_colors.keys[rand(valid_colors.size)]
     end
-    randomColors
+    random_colors
   end
 end
