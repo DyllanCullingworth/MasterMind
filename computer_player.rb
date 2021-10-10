@@ -15,7 +15,7 @@ class Computer
     random_colors = []
 
     4.times do
-      random_colors << valid_colors.keys[rand(valid_colors.size)]
+      random_colors << valid_colors.keys[rand(valid_colors.size)].to_s
     end
     random_colors
   end

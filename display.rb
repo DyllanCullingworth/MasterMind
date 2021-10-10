@@ -8,7 +8,6 @@ module Display
     display_info
     display_available_colors
     display_guesses_and_feedback
-
   end
 
   def display_banner
@@ -41,10 +40,12 @@ module Display
 
   def display_available_colors
     print "Available Colors: "
+
     @valid_colors.each do |key, value|
       print "  #{key}  ".colorize(background: value.to_sym)
       print " "
     end
+
     puts ""
     puts ""
   end
