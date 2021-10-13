@@ -1,23 +1,41 @@
 module GameLogic
    def play
+    choose_role
+
+    @secretCode = @maker.setCode
+
+    
     while @game_over == false
-      @tries += 1
-      display_board
-      guess = make_a_guess
+      @breaker.tries += 1
+      @breaker.display_board
+      guess = @breaker.make_a_guess
       get_feedback(guess)
       game_over?(guess)
     end
   end
 
-   def game_over?(guess)
+  def choose_role
+    puts "Would you like to be the Code Breaker or the Code Maker?"
+    puts "Select 1 for Breaker and 2 for Maker"
+    answer = gets.chomp
+    if answer == '1'
+      self.maker = @computer
+      self.breaker = @player
+    elsif answer == '2'
+      self.maker = @player
+      self.breaker = @computer
+    end
+  end
+
+  def game_over?(guess)
     if @secretCode == guess
       puts "Congratulations, you have won!!"
       p @secretCode
-      @player.score += 1
+      @breaker.score += 1
       game_over!
     end
 
-    if @tries >= @max_tries
+    if @breaker.tries >= @breaker.max_tries
       puts "Out of tries, you lose!"
       game_over!
     end
@@ -58,32 +76,7 @@ module GameLogic
       end
     end
 
-    @feedback << guess_feedback
+    @breaker.feedback << guess_feedback
     return guess_feedback
-  end
-
-  def make_a_guess
-    puts "Choose 4 colours from the list, seperated by commas"
-    loop do
-      guess = gets.upcase.chomp.gsub(' ', '').split(',')
-
-      if is_valid_guess? guess
-        @guesses << guess
-        return guess
-      else
-        puts "That was an invalid entry, please try again."
-      end
-    end
-  end
-
-  def is_valid_guess?(guess)
-    return false unless guess.count == 4
-
-    guess.each do |guess_item|
-      unless @valid_colors.keys.include? guess_item.to_sym
-        return false
-      end
-    end
-    true
   end
 end

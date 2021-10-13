@@ -1,15 +1,19 @@
 require './mastermind'
+require './player'
+require './human_player'
+require './computer_player'
 require 'colorize'
 
 valid_colors = {
   'R': 'red',
   'G': 'green', 
   'C': 'cyan', 
-  'M': 'magenta', 
+  'P': 'magenta', 
   'Y': 'yellow', 
   'B': 'black'
 }
-player = Player.new(valid_colors)
-computer = Computer.new(valid_colors)
+
+player = HumanPlayer.new(valid_colors)
+computer = ComputerPlayer.new(valid_colors)
 
 MasterMind.new(player, computer, valid_colors)

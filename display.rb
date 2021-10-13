@@ -35,7 +35,7 @@ module Display
 
   def display_info
     puts "Try: #{@tries} / #{@max_tries}"
-    puts "Score: #{@player.score}"
+    puts "Score: #{@score}"
   end
 
   def display_available_colors

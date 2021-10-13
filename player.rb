@@ -1,12 +1,23 @@
-class HumanPlayer < Player
-  attr_accessor :score, :secretCode
+require './game_logic'
+require './display'
+
+class Player
+  attr_accessor :score, :secretCode, :guesses, :feedback, :tries, :max_tries
+
+  include GameLogic
+  include Display
 
   def initialize(valid_colors)
-    super
+    @score = 0
+    @valid_colors = valid_colors
+    @tries = 0
+    @max_tries = 12
+    @guesses = []
+    @feedback = []
   end
 
   def setCode
-    ['R','R','R','R']
+    # Set in child class
   end
 
   def make_a_guess

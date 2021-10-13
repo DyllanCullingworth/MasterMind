@@ -1,22 +1,35 @@
-require './game_logic.rb'
-
-class Computer
+class ComputerPlayer < Player
   attr_accessor :score, :secretCode
 
-  include GameLogic
-
   def initialize(valid_colors)
-    @score = 0
-    @valid_colors = valid_colors
-    @secretCode = pickRandomColors(@valid_colors)
+    super
   end
 
-  def pickRandomColors(valid_colors)
+  def setCode
     random_colors = []
 
     4.times do
-      random_colors << valid_colors.keys[rand(valid_colors.size)].to_s
+      random_colors << @valid_colors.keys[rand(@valid_colors.size)].to_s
     end
     random_colors
   end
+
+  def make_a_guess
+    # guesses must be all caps and in array
+
+    guess = ['R','R','R','R']
+    @guesses << guess
+    return guess
+  end
+
+  # def is_valid_guess?(guess)
+  #   return false unless guess.count == 4
+
+  #   guess.each do |guess_item|
+  #     unless @valid_colors.keys.include? guess_item.to_sym
+  #       return false
+  #     end
+  #   end
+  #   true
+  # end
 end
