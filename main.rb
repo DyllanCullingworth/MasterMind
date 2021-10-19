@@ -16,4 +16,4 @@ valid_colors = {
 player = HumanPlayer.new(valid_colors)
 computer = ComputerPlayer.new(valid_colors)
 
-MasterMind.new(player, computer, valid_colors)
+game = MasterMind.new(player, computer, valid_colors)

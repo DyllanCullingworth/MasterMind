@@ -6,7 +6,19 @@ class HumanPlayer < Player
   end
 
   def setCode
-    ['R','R','R','R']
+    clear
+    display_available_colors
+
+    puts "Create a secret code from the colors in the list, seperated by commas"
+    loop do
+      code = gets.upcase.chomp.gsub(' ', '').split(',')
+
+      if is_valid? code
+        return code
+      else
+        puts "That was an invalid entry, please try again."
+      end
+    end
   end
 
   def make_a_guess
@@ -14,7 +26,7 @@ class HumanPlayer < Player
     loop do
       guess = gets.upcase.chomp.gsub(' ', '').split(',')
 
-      if is_valid_guess? guess
+      if is_valid? guess
         @guesses << guess
         return guess
       else
@@ -23,11 +35,11 @@ class HumanPlayer < Player
     end
   end
 
-  def is_valid_guess?(guess)
-    return false unless guess.count == 4
+  def is_valid?(color_array)
+    return false unless color_array.count == 4
 
-    guess.each do |guess_item|
-      unless @valid_colors.keys.include? guess_item.to_sym
+   color_array.each do |array_item|
+      unless @valid_colors.keys.include? array_item.to_sym
         return false
       end
     end

@@ -4,7 +4,7 @@ require './game_logic.rb'
 require './display.rb'
 
 class MasterMind
-  attr_accessor :tries, :maker, :breaker
+  attr_accessor :maker, :breaker
 
   include GameLogic
   include Display
@@ -13,8 +13,7 @@ class MasterMind
     @player = player
     @computer = computer
     @valid_colors = valid_colors
- 
-    
+    @winner = nil   
     @game_over = false
     
     play

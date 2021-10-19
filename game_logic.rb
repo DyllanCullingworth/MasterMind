@@ -4,12 +4,12 @@ module GameLogic
 
     @secretCode = @maker.setCode
 
-    
     while @game_over == false
       @breaker.tries += 1
-      @breaker.display_board
+      display_board
       guess = @breaker.make_a_guess
-      get_feedback(guess)
+      guess_feedback = get_feedback(guess, @secretCode)
+      @breaker.feedback << guess_feedback
       game_over?(guess)
     end
   end
@@ -29,54 +29,76 @@ module GameLogic
 
   def game_over?(guess)
     if @secretCode == guess
-      puts "Congratulations, you have won!!"
-      p @secretCode
-      @breaker.score += 1
+      @winner = @breaker
       game_over!
     end
 
     if @breaker.tries >= @breaker.max_tries
-      puts "Out of tries, you lose!"
+      @winner = @maker
       game_over!
     end
   end
 
   def game_over!
     @game_over = true
+    @winner.score += 1
+    display_board
+
+    reset_player
+
+    puts ""
+    puts "The winner is #{@winner.class}"
+    puts ""
+
+    display_color_blocks(@secretCode)
+    puts ""
+
+    play_again?
+  end
+
+  def reset_player
+    @breaker.tries = 0
+    @breaker.guesses = []
+    @breaker.feedback = []
+    if @breaker.class == ComputerPlayer
+      @breaker.possible_combinations = nil
+    end
+  end
+
+  def play_again?
     puts "Would you like to play again? [Y/N]"
     if gets.chomp.upcase == 'Y'
-      game = MasterMind.new(@player, @computer, @valid_colors)
+      clear
+      MasterMind.new(@player, @computer, @valid_colors)
     else
       puts "Thank you for playing!"
     end
   end
 
-  def get_feedback(guess)
+  def get_feedback(guess, secretCode)
     guess_feedback = []
     available_values = Hash.new 0
     used_values = Hash.new 0
     
-    @secretCode.each { |value| available_values[value] += 1 }
+    secretCode.each { |value| available_values[value] += 1 }
     
     guess.each_with_index do |guess_item, index|
-      if guess_item == @secretCode[index]
+      if guess_item == secretCode[index]
         guess_feedback << '*'
         used_values[guess_item] += 1
       end
     end
 
     guess.each_with_index do |guess_item, index|
-      if (guess_item != @secretCode[index])
-        if (@secretCode.include? guess_item) && (available_values[guess_item] > used_values[guess_item])
+      if (guess_item != secretCode[index])
+        if (secretCode.include? guess_item) && (available_values[guess_item] > used_values[guess_item])
           guess_feedback << 'x'
           used_values[guess_item] += 1
-        # else
-        #   guess_feedback << '-' 
         end
       end
     end
 
-    @breaker.feedback << guess_feedback
+    
     return guess_feedback
   end
 end

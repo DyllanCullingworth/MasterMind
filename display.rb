@@ -7,7 +7,9 @@ module Display
     display_banner
     display_info
     display_available_colors
-    display_guesses_and_feedback
+    @breaker.display_guesses_and_feedback
+
+    # p @secretCode
   end
 
   def display_banner
@@ -20,9 +22,7 @@ module Display
   def display_guesses_and_feedback
     for i in 0...@guesses.length do
 
-      @guesses[i].each do |guess_item|
-        print "  #{guess_item}  ".colorize(background: @valid_colors[guess_item.to_sym].to_sym)
-      end
+      display_color_blocks(@guesses[i])
 
       print "  Clues: "
 
@@ -33,9 +33,16 @@ module Display
     end
   end
 
+  def display_color_blocks(arr)
+    arr.each do |item|
+      print "  #{item}  ".colorize(background: @valid_colors[item.to_sym].to_sym)
+    end
+  end
+
   def display_info
-    puts "Try: #{@tries} / #{@max_tries}"
-    puts "Score: #{@score}"
+    puts "Code Breaker: #{@breaker.class}"
+    puts "Try: #{@breaker.tries} / #{@breaker.max_tries}"
+    puts "Score: #{@breaker.class}: #{@breaker.score} | #{@maker.class}: #{@maker.score}" 
   end
 
   def display_available_colors

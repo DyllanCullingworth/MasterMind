@@ -1,35 +1,73 @@
 class ComputerPlayer < Player
-  attr_accessor :score, :secretCode
+  attr_accessor :score, :secretCode, :possible_combinations
 
   def initialize(valid_colors)
     super
   end
 
   def setCode
-    random_colors = []
-
-    4.times do
-      random_colors << @valid_colors.keys[rand(@valid_colors.size)].to_s
-    end
     random_colors
   end
 
   def make_a_guess
-    # guesses must be all caps and in array
+    @possible_combinations ||= all_possible_combinations
 
-    guess = ['R','R','R','R']
+    remove_impossible_combinations
+
+
+
+    if @feedback.empty?
+      guess = @possible_combinations[rand(@possible_combinations.size)]
+    else
+      guess = min_max_guess
+    end
+    
+    sleep(0.5)
+    @possible_combinations - guess
     @guesses << guess
     return guess
   end
 
-  # def is_valid_guess?(guess)
-  #   return false unless guess.count == 4
+  def random_colors
+    colors = []
 
-  #   guess.each do |guess_item|
-  #     unless @valid_colors.keys.include? guess_item.to_sym
-  #       return false
-  #     end
-  #   end
-  #   true
-  # end
+    4.times do
+      colors << @valid_colors.keys[rand(@valid_colors.size)].to_s
+    end
+    colors
+  end
+
+  private
+
+  def min_max_guess 
+    @possible_combinations[rand(@possible_combinations.size)]
+  end
+
+  def remove_impossible_combinations
+    unless @feedback.empty?
+      if @feedback.last.length == 0
+        @guesses.last.each do |guess|
+          @possible_combinations.delete_if { |combo| combo.include? guess }
+        end
+      end
+
+      if @feedback.last.length == 4
+        @guesses.last.each do |guess|
+          @possible_combinations.delete_if { |combo| !combo.include? guess }
+        end
+      end
+      
+      @possible_combinations.each do |guess|
+        unless get_feedback(guess, @guesses.last) == @feedback.last
+          @possible_combinations.delete(guess)
+        end
+      end
+    end
+  end
+
+  def all_possible_combinations
+    arr = @valid_colors.keys.map { |key| key.to_s }
+    arr *= 4
+    arr.permutation(4).to_a.uniq
+  end
 end
