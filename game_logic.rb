@@ -15,6 +15,8 @@ module GameLogic
   end
 
   def choose_role
+    display_rules
+
     puts "Would you like to be the Code Breaker or the Code Maker?"
     puts "Select 1 for Breaker and 2 for Maker"
     answer = gets.chomp
@@ -46,9 +48,15 @@ module GameLogic
 
     reset_player
 
-    puts ""
-    puts "The winner is #{@winner.class}"
-    puts ""
+    if @winner.class == ComputerPlayer
+      puts ""
+      puts "Sorry, you lose this time!"
+      puts ""
+    else
+      puts ""
+      puts "You are the Winner!"
+      puts ""
+    end
 
     display_color_blocks(@secretCode)
     puts ""
@@ -98,7 +106,6 @@ module GameLogic
       end
     end
 
-    
     return guess_feedback
   end
 end

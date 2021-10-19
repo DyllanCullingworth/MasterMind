@@ -14,13 +14,7 @@ class ComputerPlayer < Player
 
     remove_impossible_combinations
 
-
-
-    if @feedback.empty?
-      guess = @possible_combinations[rand(@possible_combinations.size)]
-    else
-      guess = min_max_guess
-    end
+    guess = @possible_combinations[rand(@possible_combinations.size)]
     
     sleep(0.5)
     @possible_combinations - guess
@@ -39,24 +33,23 @@ class ComputerPlayer < Player
 
   private
 
-  def min_max_guess 
-    @possible_combinations[rand(@possible_combinations.size)]
-  end
-
   def remove_impossible_combinations
     unless @feedback.empty?
+      # remove all combinations containing the colors in the guess if feedback is empty
       if @feedback.last.length == 0
         @guesses.last.each do |guess|
           @possible_combinations.delete_if { |combo| combo.include? guess }
         end
       end
 
+      # remove all combinations not containing the colors in the guess if feedback is full
       if @feedback.last.length == 4
         @guesses.last.each do |guess|
           @possible_combinations.delete_if { |combo| !combo.include? guess }
         end
       end
       
+      # remove all combinations that do not provide the same feedback if the last guess was the secretCode
       @possible_combinations.each do |guess|
         unless get_feedback(guess, @guesses.last) == @feedback.last
           @possible_combinations.delete(guess)
